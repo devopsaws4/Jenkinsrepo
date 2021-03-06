@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        jdk "javahome"
+        maven "mavenhome1"
+    }
+
+    stages {
+        stage('cloning') {
+            steps {
+                // Get some code from a GitHub repository
+                git credentialsId: 'gitcredentailsid', url: 'https://github.com/devopsaws4/MavenExample1-Jar-junit.git'
+
+                              
+            } }
+		 stage('approval') {
+            steps {
+                echo "request for approval"
+				input message: 'do you want to proceed the build?',submitter:'admin4'
+
+                              
+            }
+			}	
+		stage('Build') {
+            steps {
+                
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+
+                
+            }
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
+    }
+}
