@@ -39,7 +39,7 @@ pipeline {
 			deploy adapters: [tomcat7(url: 'http://192.168.2.155:8086', 
                               credentialsId: 'a7931aac-edf7-4ede-9ece-4d5fc2e8cbd0')], 
                      war: 'target/*.war',
-                     contextPath: 'babyapp'
+                     contextPath: 'babynames'
                 
                 
             }
